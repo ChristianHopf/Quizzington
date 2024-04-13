@@ -30,9 +30,9 @@ function MultipleChoice({
         <div key={i} className="flex flex-row gap-4 items-center">
           <textarea
             id={`choice${i}`}
-            cols={69}
+            cols={65}
             rows={2}
-            className="text-lg border-2 border-gray-400 focus:outline-none focus:border-gray-600"
+            className="text-lg border-2 border-gray-400 focus:outline-none focus:border-gray-600 px-4 py-2"
             value={choice}
             onChange={(e) => {
               handleChangeChoice(e, i);
