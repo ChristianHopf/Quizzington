@@ -6,17 +6,29 @@ import Question from "../../components/quiz/Question";
 import { BeatLoader } from "react-spinners";
 import { UserQuiz } from "@/app/types/userquiz";
 import { request } from "http";
+import SubmitModal from "@/app/components/quiz/SubmitModal";
+import ScoreCard from "@/app/components/quiz/ScoreCard";
 
 type Props = {};
 
 export default function QuizPage({ params }: { params: { id: string } }) {
+  // Quiz and loading score states
   const [quiz, setQuiz] = useState<UserQuiz | null>(null);
+  const [loadingScores, setLoadingScores] = useState(false);
+  const [score, setScore] = useState<number[]>([]);
+
+  // States for user taking the quiz
   const [selectedQuestion, setSelectedQuestion] = useState(0);
-  const [questionChoices, setQuestionChoices] = useState<number[]>([]);
+  const [questionChoices, setQuestionChoices] = useState<(number | null)[]>([]);
+  const [unansweredQuestions, setUnansweredQuestions] = useState<number[]>([]);
+
+  // Modal state
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     async function fetchQuiz() {
       try {
+        // Fetch quiz and set quizData
         const res = await fetch(`/api/quiz/${params.id}`);
         if (!res.ok) {
           throw new Error("Failed to fetch quiz");
@@ -24,6 +36,12 @@ export default function QuizPage({ params }: { params: { id: string } }) {
         const quizData = await res.json();
         console.log(quizData);
         setQuiz(quizData);
+        // Set questionChoices array
+        const emptyChoices = [];
+        for (let i = 0; i < quizData.questions.length; i++) {
+          emptyChoices.push(null);
+        }
+        setQuestionChoices(emptyChoices);
       } catch (err) {
         console.error("Error fetching quiz: ", err);
       }
@@ -65,10 +83,25 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     ],
   };
 
-  async function handleSubmitQuiz() {
-    // Open modal asking user to confirm that they want to submit the quiz
+  function handleOpenModal() {
+    // Determine which questions are unanswered to send to the SubmitModal
+    const unanswered = [];
+    for (let i = 0; i < questionChoices.length; i++) {
+      if (questionChoices[i] === null) {
+        unanswered.push(i);
+      }
+    }
+    // Set unanswered questions and open the SubmitModal
+    setUnansweredQuestions(unanswered);
+    setShowModal(true);
+  }
 
-    // Submit quiz
+  function handleCloseModal() {
+    setShowModal(false);
+  }
+
+  async function handleSubmitQuiz() {
+    setLoadingScores(true);
     try {
       // Post choices array
       const res = await fetch(`/api/answers`, {
@@ -81,10 +114,27 @@ export default function QuizPage({ params }: { params: { id: string } }) {
       const data = await res.json();
       console.log(questionChoices);
       console.log(data);
-      // Display scorecard
+      setScore(data);
     } catch (err) {
       console.error("Error: ", err);
+    } finally {
+      setLoadingScores(false);
     }
+    // Close the open modal
+    handleCloseModal();
+  }
+
+  function handleRetakeQuiz() {
+    setScore([]);
+    setSelectedQuestion(0);
+    const emptyChoices = [];
+    if (quiz) {
+      for (let i = 0; i < quiz.questions.length; i++) {
+        emptyChoices.push(null);
+      }
+      setQuestionChoices(emptyChoices);
+    }
+    setUnansweredQuestions([]);
   }
 
   function nextQuestion() {
@@ -98,8 +148,13 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     setSelectedQuestion(index);
   }
 
+  function handleSelectUnansweredQuestion(index: number) {
+    setShowModal(false);
+    setSelectedQuestion(index);
+  }
+
   function handleChangeQuestionChoice(index: number) {
-    setQuestionChoices((choices: number[]) => {
+    setQuestionChoices((choices: (number | null)[]) => {
       const newChoices = [...choices];
       newChoices[selectedQuestion] = index;
       return newChoices;
@@ -109,9 +164,22 @@ export default function QuizPage({ params }: { params: { id: string } }) {
   return (
     <main className="flex flex-col items-center min-h-screen bg-gradient-to-b from-[#7209b7] to-[#b457f1]">
       <Header />
-      {!quiz && <BeatLoader color="#36d7b7" />}
-      {quiz && (
-        <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg px-8 py-6 mt-8">
+      {/* Quiz serves as a loading state */}
+      {!quiz && <BeatLoader color="white" />}
+
+      {/* Quiz has been submitted and scores have been received */}
+      {!loadingScores && score.length > 0 && (
+        <ScoreCard
+          score={score}
+          quiz={quiz}
+          questionChoices={questionChoices}
+          onRetakeQuiz={handleRetakeQuiz}
+        />
+      )}
+
+      {/* Quiz has loaded and has not been submitted, or quiz has been submitted */}
+      {quiz && !loadingScores && score.length === 0 && (
+        <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg px-8 py-6 mt-6">
           <h1 className="text-3xl text-center mb-6">{quiz.title}</h1>
           <div className="flex flex-col lg:flex-row">
             <div className="w-full lg:w-48">
@@ -146,7 +214,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
             {selectedQuestion === quiz.questions.length - 1 ? (
               <button
                 className="bg-[#7209b7] text-white rounded-lg px-6 py-3 hover:bg-purple-800 focus:outline-none focus:bg-purple-800"
-                onClick={handleSubmitQuiz}
+                onClick={handleOpenModal}
               >
                 Submit
               </button>
@@ -160,6 +228,18 @@ export default function QuizPage({ params }: { params: { id: string } }) {
             )}
           </div>
         </div>
+      )}
+      {/* Quiz has been submitted and scores have not yet been received */}
+      {loadingScores ? (
+        <BeatLoader color="white" />
+      ) : (
+        <SubmitModal
+          show={showModal}
+          unansweredQuestions={unansweredQuestions}
+          onSelectUnanswered={handleSelectUnansweredQuestion}
+          onClose={handleCloseModal}
+          onConfirm={handleSubmitQuiz}
+        />
       )}
     </main>
   );
