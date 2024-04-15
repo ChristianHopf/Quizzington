@@ -1,7 +1,6 @@
 import { Quiz } from "@/app/types/quiz";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
 
 export async function POST(
   request: NextRequest,
