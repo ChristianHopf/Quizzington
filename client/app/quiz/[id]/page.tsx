@@ -93,6 +93,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     }
     // Set unanswered questions and open the SubmitModal
     setUnansweredQuestions(unanswered);
+    console.log(questionChoices);
     setShowModal(true);
   }
 
@@ -112,8 +113,8 @@ export default function QuizPage({ params }: { params: { id: string } }) {
         }),
       });
       const data = await res.json();
-      console.log(questionChoices);
-      console.log(data);
+      console.log("question choices: " + questionChoices);
+      console.log("correct answers:" + data);
       setScore(data);
     } catch (err) {
       console.error("Error: ", err);
@@ -157,6 +158,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     setQuestionChoices((choices: (number | null)[]) => {
       const newChoices = [...choices];
       newChoices[selectedQuestion] = index;
+      console.log(newChoices);
       return newChoices;
     });
   }
@@ -168,7 +170,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
       {!quiz && <BeatLoader color="white" />}
 
       {/* Quiz has been submitted and scores have been received */}
-      {!loadingScores && score.length > 0 && (
+      {!loadingScores && quiz && score.length > 0 && (
         <ScoreCard
           score={score}
           quiz={quiz}

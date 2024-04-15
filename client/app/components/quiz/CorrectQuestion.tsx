@@ -5,10 +5,9 @@ type Props = {
   data: UserQuestion;
   index: number;
   selectedChoice: number | null;
-  onChangeChoice: (index: number) => void;
 };
 
-function Question({ data, index, selectedChoice, onChangeChoice }: Props) {
+function CorrectQuestion({ data, index, selectedChoice }: Props) {
   // console.log(data);
   return (
     <div className="flex w-full flex-col items-center">
@@ -21,13 +20,9 @@ function Question({ data, index, selectedChoice, onChangeChoice }: Props) {
           <button
             key={i}
             className={`w-full text-left rounded border-2 border-gray-200 px-4 py-2 mb-2 ${
-              selectedChoice === i ? "border-gray-600" : ""
+              selectedChoice === i ? "border-green-600" : ""
             }`}
-            onClick={(e) => {
-              e.preventDefault();
-              onChangeChoice(i);
-            }}
-            disabled={!onChangeChoice}
+            disabled
           >
             {choice}
           </button>
@@ -38,24 +33,18 @@ function Question({ data, index, selectedChoice, onChangeChoice }: Props) {
           <button
             key="trueButton"
             className={`text-xl w-24 rounded border-2 border-gray-200 px-4 py-2 mb-2 ${
-              selectedChoice === 1 ? "border-gray-600" : ""
+              selectedChoice === 1 ? "border-green-600" : ""
             }`}
-            onClick={(e) => {
-              e.preventDefault();
-              onChangeChoice(1);
-            }}
+            disabled
           >
             True
           </button>
           <button
             key="falseButton"
             className={`text-xl w-24 rounded border-2 border-gray-200 px-4 py-2 mb-2 ${
-              selectedChoice === 0 ? "border-gray-600" : ""
+              selectedChoice === 0 ? "border-green-600" : ""
             }`}
-            onClick={(e) => {
-              e.preventDefault();
-              onChangeChoice(0);
-            }}
+            disabled
           >
             False
           </button>
@@ -65,4 +54,4 @@ function Question({ data, index, selectedChoice, onChangeChoice }: Props) {
   );
 }
 
-export default Question;
+export default CorrectQuestion;

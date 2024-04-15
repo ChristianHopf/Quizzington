@@ -3,51 +3,34 @@
 import React, { useState } from "react";
 import Header from "../components/ui/Header";
 import QuestionForm from "../components/create/QuestionForm";
-import type Question from "../types/question";
-import type Quiz from "../types/quiz";
+// import type Question from "../types/question";
+// import type Quiz from "../types/quiz";
 import axios from "axios";
 import { NextResponse } from "next/server";
 import Created from "../components/create/Created";
+import { Quiz } from "../types/quiz";
+import { Question } from "../types/question";
 
 type Props = {};
 
 export default function CreatePage({}: Props) {
-  const [quiz, setQuiz] = useState({
-    title: "Quiz Title",
+  const [quiz, setQuiz] = useState<Quiz>({
+    title: "",
     questions: [
       {
-        question_text: "Where am I?",
+        question_text: "",
         question_type: "multiple_choice",
-        choices: ["Quizzington", "Home Depot", "Movement Plano", "Space"],
+        choices: ["", "", "", ""],
         correct_choice: 0,
         question_order_num: 0,
-      },
-      {
-        question_text: "Climbing gym",
-        question_type: "multiple_choice",
-        choices: ["Quizzington", "Home Depot", "Movement Plano", "Space"],
-        correct_choice: 2,
-        question_order_num: 1,
-      },
-      {
-        question_text: "Home Depot",
-        question_type: "multiple_choice",
-        choices: ["Quizzington", "Home Depot", "Movement Plano", "Space"],
-        correct_choice: 1,
-        question_order_num: 2,
-      },
-      {
-        question_text: "Nice weather today",
-        question_type: "true_false",
-        choices: null,
-        correct_choice: 0,
-        question_order_num: 3,
       },
     ],
   });
   const [link, setLink] = useState("");
 
   const [selectedQuestion, setSelectedQuestion] = useState(0);
+
+  console.log(quiz);
 
   async function handleSubmitQuiz() {
     console.log(JSON.stringify(quiz));
@@ -79,9 +62,6 @@ export default function CreatePage({}: Props) {
         ...quiz.questions[selectedQuestion],
         question_type: type,
       };
-      if (newQuestion.choices === null) {
-        newQuestion.choices = ["", "", "", ""];
-      }
       const newQuestions = [...quiz.questions];
       newQuestions[selectedQuestion] = newQuestion;
       const newQuiz = { ...quiz, questions: newQuestions };
@@ -91,16 +71,32 @@ export default function CreatePage({}: Props) {
 
   function handleChangeQuestionText(text: string) {
     setQuiz((quiz: Quiz) => {
+      const newQuestion = {
+        ...quiz.questions[selectedQuestion],
+        question_text: text,
+      };
+      const newQuestions = [...quiz.questions];
+      newQuestions[selectedQuestion] = newQuestion;
       const newQuiz = { ...quiz };
-      newQuiz.questions[selectedQuestion].text = text;
+      newQuiz.questions = newQuestions;
       return newQuiz;
     });
   }
 
   function handleChangeQuestionChoice(index: number, choice: string) {
     setQuiz((quiz: Quiz) => {
+      const newChoices: string[] = [
+        ...quiz.questions[selectedQuestion].choices,
+      ];
+      newChoices[index] = choice;
+      const newQuestion = {
+        ...quiz.questions[selectedQuestion],
+        choices: newChoices,
+      };
+      const newQuestions = [...quiz.questions];
+      newQuestions[selectedQuestion] = newQuestion;
       const newQuiz = { ...quiz };
-      newQuiz.questions[selectedQuestion].choices[index] = choice;
+      newQuiz.questions = newQuestions;
       return newQuiz;
     });
   }
@@ -170,7 +166,10 @@ export default function CreatePage({}: Props) {
                 </button>
               ))}
               <button
-                onClick={addQuestion}
+                onClick={(e) => {
+                  e.preventDefault();
+                  addQuestion();
+                }}
                 className="text-md rounded-lg px-4 py-2 mb-6 text-gray-600 hover:bg-gray-200 hover:text-black"
               >
                 + Add Question
@@ -201,7 +200,7 @@ export default function CreatePage({}: Props) {
           </button>
         </div>
       </form>
-      <Created link={link}/>
+      <Created link={link} />
     </main>
   );
 }

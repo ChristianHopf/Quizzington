@@ -4,26 +4,31 @@ import { UserQuestion } from "@/app/types/userquestion";
 type Props = {
   data: UserQuestion;
   index: number;
+  correct: boolean;
   selectedChoice: number | null;
 };
 
-function IncorrectQuestion({ data, index, selectedChoice }: Props) {
-  // console.log(data);
+function ReviewQuestion({ data, index, correct, selectedChoice }: Props) {
+  const correctStyles = correct ? "border-green-600" : "border-red-400";
+
   return (
     <div className="flex w-full flex-col items-center">
       <p className="text-xl mb-4 max-h-48 overflow-auto">
-        Sample text sample text sample text sample text sample text sample text
-        sample text sample text sample text sample text sample text sample text
-        sample text sample text sample text sample text sample text sample text
-        sample text
+        {data.question_text}
       </p>
+      {/* Unanswered questions are incorrect, no choice is selected */}
+      {selectedChoice === null && (
+        <p className="text-xl text-red-500 mb-4 max-h-48 overflow-auto">
+          Question was not answered
+        </p>
+      )}
       {data.choices ? (
         // Multiple Choice
         data.choices.map((choice, i) => (
           <button
             key={i}
             className={`w-full text-left rounded border-2 border-gray-200 px-4 py-2 mb-2 ${
-              selectedChoice === i ? "border-red-400" : ""
+              selectedChoice === i ? correctStyles : ""
             }`}
             disabled
           >
@@ -36,7 +41,7 @@ function IncorrectQuestion({ data, index, selectedChoice }: Props) {
           <button
             key="trueButton"
             className={`text-xl w-24 rounded border-2 border-gray-200 px-4 py-2 mb-2 ${
-              selectedChoice === 1 ? "border-red-400" : ""
+              selectedChoice === 1 ? correctStyles : ""
             }`}
             disabled
           >
@@ -45,7 +50,7 @@ function IncorrectQuestion({ data, index, selectedChoice }: Props) {
           <button
             key="falseButton"
             className={`text-xl w-24 rounded border-2 border-gray-200 px-4 py-2 mb-2 ${
-              selectedChoice === 0 ? "border-red-400" : ""
+              selectedChoice === 0 ? correctStyles : ""
             }`}
             disabled
           >
@@ -57,4 +62,4 @@ function IncorrectQuestion({ data, index, selectedChoice }: Props) {
   );
 }
 
-export default IncorrectQuestion;
+export default ReviewQuestion;

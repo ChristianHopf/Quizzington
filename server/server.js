@@ -116,17 +116,12 @@ app.post("/answers", async (req, res) => {
     // Query correct choices by quiz id
     const quizId = req.body.quizId;
     const query = `
-    SELECT
-    JSON_ARRAYAGG(q.correct_choice) AS correct_choices
+    SELECT GROUP_CONCAT(correct_choice ORDER BY question_order_num ASC) AS correct_choices
 FROM (
-    SELECT
-        questions.correct_choice
-    FROM
-        quizzes
-    JOIN
-        questions ON quizzes.quiz_id = questions.quiz_id
-    WHERE
-        quizzes.quiz_id = UUID_TO_BIN(?)
+    SELECT questions.correct_choice, questions.question_order_num
+    FROM quizzes
+    JOIN questions ON quizzes.quiz_id = questions.quiz_id
+    WHERE quizzes.quiz_id = UUID_TO_BIN(?)
 ) AS q;`;
     db.query(query, quizId, (err, result) => {
       if (err) {
@@ -139,9 +134,10 @@ FROM (
       // Build score array:
       // Correct answer - 0
       // Incorrect answer - 1
+      const correct_choices = result[0].correct_choices.split(",").join("");
       const results = [];
       for (let i = 0; i < req.body.questionChoices.length; i++) {
-        req.body.questionChoices[i] === result[0].correct_choices[i]
+        req.body.questionChoices[i] === parseInt(correct_choices[i])
           ? (results[i] = 1)
           : (results[i] = 0);
       }
