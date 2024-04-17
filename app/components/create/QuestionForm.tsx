@@ -12,7 +12,7 @@ type Props = {
   onChangeCorrectChoice: (index: number) => void;
 };
 
-function Question({
+function QuestionForm({
   data,
   index,
   onChangeType,
@@ -92,4 +92,4 @@ function Question({
   );
 }
 
-export default Question;
+export default QuestionForm;
