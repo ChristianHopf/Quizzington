@@ -18,11 +18,11 @@ export default function CreatePage({}: Props) {
     title: "",
     questions: [
       {
-        question_text: "",
-        question_type: "multiple_choice",
+        text: "",
+        type: "multiple_choice",
         choices: ["", "", "", ""],
         correct_choice: 0,
-        question_order_num: 0,
+        order_num: 0,
       },
     ],
   });
@@ -39,8 +39,8 @@ export default function CreatePage({}: Props) {
       body: JSON.stringify(quiz),
     });
     const data = await res.json();
-    setLink(data.message);
-    console.log(data);
+    setLink(data);
+    // console.log(data);
   }
 
   function handleSelectQuestion(index: number) {
@@ -60,7 +60,7 @@ export default function CreatePage({}: Props) {
     setQuiz((quiz: Quiz) => {
       const newQuestion = {
         ...quiz.questions[selectedQuestion],
-        question_type: type,
+        type: type,
       };
       const newQuestions = [...quiz.questions];
       newQuestions[selectedQuestion] = newQuestion;
@@ -73,7 +73,7 @@ export default function CreatePage({}: Props) {
     setQuiz((quiz: Quiz) => {
       const newQuestion = {
         ...quiz.questions[selectedQuestion],
-        question_text: text,
+        text: text,
       };
       const newQuestions = [...quiz.questions];
       newQuestions[selectedQuestion] = newQuestion;
@@ -118,11 +118,11 @@ export default function CreatePage({}: Props) {
     // add an empty question to the quiz
     setQuiz((quiz: Quiz) => {
       const newQuestion = {
-        question_text: "",
-        question_type: "multiple_choice",
+        text: "",
+        type: "multiple_choice",
         choices: ["", "", "", ""],
         correct_choice: 0,
-        question_order_num: quiz.questions.length,
+        order_num: quiz.questions.length,
       };
       const newQuestions = [...quiz.questions, newQuestion];
       const newQuiz = { ...quiz, questions: newQuestions };

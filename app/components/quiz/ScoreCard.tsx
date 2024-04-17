@@ -33,8 +33,6 @@ function ScoreCard({ quiz, score, questionChoices, onRetakeQuiz }: Props) {
     .map((n, i) => (n === 1 ? i : null))
     .filter((n) => n !== null);
 
-  console.log(incorrectAnswers);
-
   return (
     <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg px-8 py-6 mt-6">
       {/* Score percentage */}

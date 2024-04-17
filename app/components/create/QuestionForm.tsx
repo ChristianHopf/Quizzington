@@ -1,6 +1,7 @@
 import React from "react";
 import MultipleChoice from "./MultipleChoice";
 import TrueOrFalse from "./TrueOrFalse";
+import { Question } from "@/app/types/question";
 
 type Props = {
   data: Question;
@@ -9,13 +10,6 @@ type Props = {
   onChangeText: (text: string) => void;
   onChangeChoice: (index: number, choice: string) => void;
   onChangeCorrectChoice: (index: number) => void;
-};
-type Question = {
-  question_text: string;
-  question_type: string;
-  choices: string[] | null;
-  correct_choice: number;
-  question_order_num: number;
 };
 
 function Question({
@@ -31,7 +25,6 @@ function Question({
   function handleChangeText(event: React.ChangeEvent<HTMLTextAreaElement>) {
     onChangeText(event.target.value);
   }
-  console.log(data.question_type);
 
   return (
     <div className="flex w-full flex-col items-center">
@@ -42,7 +35,7 @@ function Question({
           <div className="flex flex-row gap-6">
             <button
               className={`text-white rounded-md px-4 py-2 ${
-                data.question_type === "multiple_choice"
+                data.type === "multiple_choice"
                   ? "bg-[#7209b7]"
                   : "bg-[#b457f1]"
               } hover:bg-[#7209b7] block`}
@@ -55,9 +48,7 @@ function Question({
             </button>
             <button
               className={`text-white rounded-md px-4 py-2 ${
-                data.question_type === "true_false"
-                  ? "bg-[#7209b7]"
-                  : "bg-[#b457f1]"
+                data.type === "true_false" ? "bg-[#7209b7]" : "bg-[#b457f1]"
               } hover:bg-[#7209b7] block`}
               onClick={(e) => {
                 e.preventDefault();
@@ -74,14 +65,14 @@ function Question({
             cols={5}
             rows={3}
             className="rounded border-2 border-gray-400 focus:outline-none focus:border-gray-700 px-4 py-2"
-            value={data.question_text}
+            value={data.text}
             onChange={(event) => {
               handleChangeText(event);
             }}
           ></textarea>
         </div>
         <div className="flex flex-col gap-2">
-          {data.question_type === "multiple_choice" ? (
+          {data.type === "multiple_choice" ? (
             <MultipleChoice
               key={`multiple_choice_${index}`}
               choices={data.choices}

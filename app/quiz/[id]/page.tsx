@@ -68,7 +68,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
           throw new Error("Failed to fetch quiz");
         }
         const quizData = await res.json();
-        console.log(quizData);
+        // console.log(quizData);
         setQuiz(quizData);
         // Set questionChoices array
         const emptyChoices = [];
@@ -95,8 +95,8 @@ export default function QuizPage({ params }: { params: { id: string } }) {
         }),
       });
       const data = await res.json();
-      console.log("question choices: " + questionChoices);
-      console.log("correct answers:" + data);
+      // console.log("question choices: " + questionChoices);
+      // console.log("correct answers:" + data);
       setScore(data);
     } catch (err) {
       console.error("Error: ", err);
@@ -158,7 +158,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     setQuestionChoices((choices: (number | null)[]) => {
       const newChoices = [...choices];
       newChoices[selectedQuestion] = index;
-      console.log(newChoices);
+      // console.log(newChoices);
       return newChoices;
     });
   }
