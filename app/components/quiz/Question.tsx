@@ -12,12 +12,10 @@ function Question({ data, index, selectedChoice, onChangeChoice }: Props) {
   // console.log(data);
   return (
     <div className="flex w-full flex-col items-center">
-      <p className="text-xl mb-4 max-h-48 overflow-auto">
-        {data.question_text}
-      </p>
-      {data.choices ? (
+      <p className="text-xl mb-4 max-h-48 overflow-auto">{data.text}</p>
+      {data.type === "multiple_choice" ? (
         // Multiple Choice
-        data.choices.map((choice, i) => (
+        data.Choice.map((choice, i) => (
           <button
             key={i}
             className={`w-full text-left rounded border-2 border-gray-200 px-4 py-2 mb-2 ${
@@ -29,7 +27,7 @@ function Question({ data, index, selectedChoice, onChangeChoice }: Props) {
             }}
             disabled={!onChangeChoice}
           >
-            {choice}
+            {choice.text}
           </button>
         ))
       ) : (

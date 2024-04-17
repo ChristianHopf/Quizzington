@@ -13,18 +13,16 @@ function ReviewQuestion({ data, index, correct, selectedChoice }: Props) {
 
   return (
     <div className="flex w-full flex-col items-center">
-      <p className="text-xl mb-4 max-h-48 overflow-auto">
-        {data.question_text}
-      </p>
+      <p className="text-xl mb-4 max-h-48 overflow-auto">{data.text}</p>
       {/* Unanswered questions are incorrect, no choice is selected */}
       {selectedChoice === null && (
         <p className="text-xl text-red-500 mb-4 max-h-48 overflow-auto">
           Question was not answered
         </p>
       )}
-      {data.choices ? (
+      {data.type === "multiple_choice" ? (
         // Multiple Choice
-        data.choices.map((choice, i) => (
+        data.Choice.map((choice, i) => (
           <button
             key={i}
             className={`w-full text-left rounded border-2 border-gray-200 px-4 py-2 mb-2 ${
@@ -32,7 +30,7 @@ function ReviewQuestion({ data, index, correct, selectedChoice }: Props) {
             }`}
             disabled
           >
-            {choice}
+            {choice.text}
           </button>
         ))
       ) : (

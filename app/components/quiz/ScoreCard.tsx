@@ -87,7 +87,7 @@ function ScoreCard({ quiz, score, questionChoices, onRetakeQuiz }: Props) {
         </div>
         <div className="w-full lg:pl-8">
           <ReviewQuestion
-            data={quiz.questions[selectedQuestion]}
+            data={quiz.Question[selectedQuestion]}
             index={selectedQuestion}
             correct={score[selectedQuestion] === 1}
             selectedChoice={questionChoices[selectedQuestion]}

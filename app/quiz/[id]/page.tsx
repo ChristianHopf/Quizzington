@@ -25,30 +25,6 @@ export default function QuizPage({ params }: { params: { id: string } }) {
   // Modal state
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    async function fetchQuiz() {
-      try {
-        // Fetch quiz and set quizData
-        const res = await fetch(`/api/quiz/${params.id}`);
-        if (!res.ok) {
-          throw new Error("Failed to fetch quiz");
-        }
-        const quizData = await res.json();
-        console.log(quizData);
-        setQuiz(quizData);
-        // Set questionChoices array
-        const emptyChoices = [];
-        for (let i = 0; i < quizData.questions.length; i++) {
-          emptyChoices.push(null);
-        }
-        setQuestionChoices(emptyChoices);
-      } catch (err) {
-        console.error("Error fetching quiz: ", err);
-      }
-    }
-    fetchQuiz();
-  }, [params.id]);
-
   const sampleQuiz = {
     title: "Quiz Title",
     questions: [
@@ -83,23 +59,29 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     ],
   };
 
-  function handleOpenModal() {
-    // Determine which questions are unanswered to send to the SubmitModal
-    const unanswered = [];
-    for (let i = 0; i < questionChoices.length; i++) {
-      if (questionChoices[i] === null) {
-        unanswered.push(i);
+  useEffect(() => {
+    async function fetchQuiz() {
+      try {
+        // Fetch quiz and set quizData
+        const res = await fetch(`/api/quiz/${params.id}`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch quiz");
+        }
+        const quizData = await res.json();
+        console.log(quizData);
+        setQuiz(quizData);
+        // Set questionChoices array
+        const emptyChoices = [];
+        for (let i = 0; i < quizData.Question.length; i++) {
+          emptyChoices.push(null);
+        }
+        setQuestionChoices(emptyChoices);
+      } catch (err) {
+        console.error("Error fetching quiz: ", err);
       }
     }
-    // Set unanswered questions and open the SubmitModal
-    setUnansweredQuestions(unanswered);
-    console.log(questionChoices);
-    setShowModal(true);
-  }
-
-  function handleCloseModal() {
-    setShowModal(false);
-  }
+    fetchQuiz();
+  }, [params.id]);
 
   async function handleSubmitQuiz() {
     setLoadingScores(true);
@@ -125,12 +107,30 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     handleCloseModal();
   }
 
+  function handleOpenModal() {
+    // Determine which questions are unanswered to send to the SubmitModal
+    const unanswered = [];
+    for (let i = 0; i < questionChoices.length; i++) {
+      if (questionChoices[i] === null) {
+        unanswered.push(i);
+      }
+    }
+    // Set unanswered questions and open the SubmitModal
+    setUnansweredQuestions(unanswered);
+    console.log(questionChoices);
+    setShowModal(true);
+  }
+
+  function handleCloseModal() {
+    setShowModal(false);
+  }
+
   function handleRetakeQuiz() {
     setScore([]);
     setSelectedQuestion(0);
     const emptyChoices = [];
     if (quiz) {
-      for (let i = 0; i < quiz.questions.length; i++) {
+      for (let i = 0; i < quiz.Question.length; i++) {
         emptyChoices.push(null);
       }
       setQuestionChoices(emptyChoices);
@@ -187,7 +187,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
             <div className="w-full lg:w-48">
               <div className="flex flex-col gap-4">
                 <h2 className="text-2xl mx-auto mb-2">Questions</h2>
-                {quiz.questions.map((_, index) => (
+                {quiz.Question.map((_, index) => (
                   <button
                     key={index}
                     className={`text-lg rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-200 hover:text-black ${
@@ -205,7 +205,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
             </div>
             <div className="w-full lg:pl-8">
               <Question
-                data={quiz.questions[selectedQuestion]}
+                data={quiz.Question[selectedQuestion]}
                 index={selectedQuestion}
                 selectedChoice={questionChoices[selectedQuestion]}
                 onChangeChoice={handleChangeQuestionChoice}
@@ -213,7 +213,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
             </div>
           </div>
           <div className="flex justify-end mt-6">
-            {selectedQuestion === quiz.questions.length - 1 ? (
+            {selectedQuestion === quiz.Question.length - 1 ? (
               <button
                 className="bg-[#7209b7] text-white rounded-lg px-6 py-3 hover:bg-purple-800 focus:outline-none focus:bg-purple-800"
                 onClick={handleOpenModal}
