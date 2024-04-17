@@ -68,7 +68,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
           throw new Error("Failed to fetch quiz");
         }
         const quizData = await res.json();
-        // console.log(quizData);
+        console.log(quizData);
         setQuiz(quizData);
         // Set questionChoices array
         const emptyChoices = [];

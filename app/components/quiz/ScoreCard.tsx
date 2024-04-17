@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import IncorrectQuestion from "./ReviewQuestion";
 import { Quiz } from "@/app/types/quiz";
 import { UserQuiz } from "@/app/types/userquiz";
 import ReviewQuestion from "./ReviewQuestion";
@@ -15,6 +14,8 @@ type Props = {
 
 function ScoreCard({ quiz, score, questionChoices, onRetakeQuiz }: Props) {
   const [selectedQuestion, setSelectedQuestion] = useState<number>(0);
+
+  console.log(score);
 
   function handleSelectQuestion(question: number) {
     setSelectedQuestion(question);
@@ -56,41 +57,52 @@ function ScoreCard({ quiz, score, questionChoices, onRetakeQuiz }: Props) {
                     }`}
                     onClick={(e) => {
                       e.preventDefault();
-                      handleSelectQuestion(question);
+                      handleSelectQuestion(question ? question : 0);
                     }}
                   >
-                    Question {question + 1}
+                    Question {question !== null ? question + 1 : ""}
                   </button>
                 ))}
               </>
             )}
-            <h2 className="text-2xl mx-auto mb-2 text-center">
-              Correct answers
-            </h2>
-            {correctAnswers.map((question, index) => (
-              <button
-                key={index}
-                className={`text-lg rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-200 hover:text-black ${
-                  selectedQuestion === question ? "bg-gray-200 text-black" : ""
-                }`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSelectQuestion(question);
-                }}
-              >
-                Question {question + 1}
-              </button>
-            ))}
+            {correctAnswers.length > 0 && (
+              <>
+                <h2 className="text-2xl mx-auto mb-2 text-center">
+                  Correct answers
+                </h2>
+                {correctAnswers.map((question, index) => (
+                  <button
+                    key={index}
+                    className={`text-lg rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-200 hover:text-black ${
+                      selectedQuestion === question
+                        ? "bg-gray-200 text-black"
+                        : ""
+                    }`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // This shouldn't ever be a problem.
+                      // If this renders there is at least 1 correct question.
+                      // I just don't know ho to fix the type error
+                      handleSelectQuestion(question ? question : 0);
+                    }}
+                  >
+                    Question {question !== null ? question + 1 : ""}
+                  </button>
+                ))}
+              </>
+            )}
           </div>
         </div>
-        <div className="w-full lg:pl-8">
-          <ReviewQuestion
-            data={quiz.Question[selectedQuestion]}
-            index={selectedQuestion}
-            correct={score[selectedQuestion] === 1}
-            selectedChoice={questionChoices[selectedQuestion]}
-          />
-        </div>
+        {quiz && (
+          <div className="w-full lg:pl-8">
+            <ReviewQuestion
+              data={quiz.Question[selectedQuestion]}
+              index={selectedQuestion}
+              correct={score[selectedQuestion] === 1}
+              selectedChoice={questionChoices[selectedQuestion]}
+            />
+          </div>
+        )}
       </div>
       {/* Retake quiz button */}
       <div className="flex justify-end mt-6">

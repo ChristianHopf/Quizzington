@@ -2,25 +2,30 @@ import React from "react";
 import { UserQuestion } from "@/app/types/userquestion";
 
 type Props = {
-  data: UserQuestion;
-  index: number;
-  correct: boolean;
+  data: UserQuestion | null;
+  index: number | null;
+  correct: boolean | null;
   selectedChoice: number | null;
 };
 
 function ReviewQuestion({ data, index, correct, selectedChoice }: Props) {
+  console.log(data);
+  console.log(index);
+  console.log(correct);
   const correctStyles = correct ? "border-green-600" : "border-red-400";
 
   return (
     <div className="flex w-full flex-col items-center">
-      <p className="text-xl mb-4 max-h-48 overflow-auto">{data.text}</p>
+      <p className="text-xl mb-4 max-h-48 overflow-auto">
+        {data ? data.text : null}
+      </p>
       {/* Unanswered questions are incorrect, no choice is selected */}
       {selectedChoice === null && (
         <p className="text-xl text-red-500 mb-4 max-h-48 overflow-auto">
           Question was not answered
         </p>
       )}
-      {data.type === "multiple_choice" ? (
+      {data !== null && data.type === "multiple_choice" ? (
         // Multiple Choice
         data.Choice.map((choice, i) => (
           <button

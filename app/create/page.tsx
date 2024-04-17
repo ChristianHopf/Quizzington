@@ -85,9 +85,8 @@ export default function CreatePage({}: Props) {
 
   function handleChangeQuestionChoice(index: number, choice: string) {
     setQuiz((quiz: Quiz) => {
-      const newChoices: string[] = [
-        ...quiz.questions[selectedQuestion].choices,
-      ];
+      const newChoices: string[] =
+        quiz.questions[selectedQuestion].choices || [];
       newChoices[index] = choice;
       const newQuestion = {
         ...quiz.questions[selectedQuestion],
