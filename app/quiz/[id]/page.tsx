@@ -25,39 +25,39 @@ export default function QuizPage({ params }: { params: { id: string } }) {
   // Modal state
   const [showModal, setShowModal] = useState(false);
 
-  const sampleQuiz = {
-    title: "Quiz Title",
-    questions: [
-      {
-        question_text: "Where am I?",
-        question_type: "multiple_choice",
-        choices: ["Quizzington", "Home Depot", "Movement Plano", "Space"],
-        correct_choice: 0,
-        question_order_num: 0,
-      },
-      {
-        question_text: "Climbing gym",
-        question_type: "multiple_choice",
-        choices: ["Quizzington", "Home Depot", "Movement Plano", "Space"],
-        correct_choice: 2,
-        question_order_num: 1,
-      },
-      {
-        question_text: "Home Depot",
-        question_type: "multiple_choice",
-        choices: ["Quizzington", "Home Depot", "Movement Plano", "Space"],
-        correct_choice: 1,
-        question_order_num: 2,
-      },
-      {
-        question_text: "Nice weather today",
-        question_type: "true_false",
-        choices: null,
-        correct_choice: 0,
-        question_order_num: 3,
-      },
-    ],
-  };
+  // const sampleQuiz = {
+  //   title: "Quiz Title",
+  //   questions: [
+  //     {
+  //       question_text: "Where am I?",
+  //       question_type: "multiple_choice",
+  //       choices: ["Quizzington", "Home Depot", "Movement Plano", "Space"],
+  //       correct_choice: 0,
+  //       question_order_num: 0,
+  //     },
+  //     {
+  //       question_text: "Climbing gym",
+  //       question_type: "multiple_choice",
+  //       choices: ["Quizzington", "Home Depot", "Movement Plano", "Space"],
+  //       correct_choice: 2,
+  //       question_order_num: 1,
+  //     },
+  //     {
+  //       question_text: "Home Depot",
+  //       question_type: "multiple_choice",
+  //       choices: ["Quizzington", "Home Depot", "Movement Plano", "Space"],
+  //       correct_choice: 1,
+  //       question_order_num: 2,
+  //     },
+  //     {
+  //       question_text: "Nice weather today",
+  //       question_type: "true_false",
+  //       choices: null,
+  //       correct_choice: 0,
+  //       question_order_num: 3,
+  //     },
+  //   ],
+  // };
 
   useEffect(() => {
     async function fetchQuiz() {
