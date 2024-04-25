@@ -10,7 +10,7 @@ function CopyLink({ link }: Props) {
   const [copied, setCopied] = useState(false);
 
   function copyToClipboard() {
-    navigator.clipboard.writeText(`http://localhost:5000/quiz/${link}`);
+    navigator.clipboard.writeText(`http://localhost:3000/quiz/${link}`);
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
