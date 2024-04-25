@@ -10,10 +10,20 @@ import { NextResponse } from "next/server";
 import Created from "../components/create/Created";
 import { Quiz } from "../types/quiz";
 import { Question } from "../types/question";
+// import { getServerSession } from "next-auth";
+// import { authOptions } from "../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type Props = {};
 
 export default function CreatePage({}: Props) {
+  const { data: session } = useSession();
+  if (!session || !session.user) {
+    redirect("/");
+  }
+  console.log(session);
+
   const [quiz, setQuiz] = useState<Quiz>({
     title: "",
     questions: [
@@ -26,7 +36,7 @@ export default function CreatePage({}: Props) {
       },
     ],
   });
-  const [link, setLink] = useState("");
+  const [link, setLink] = useState(undefined);
 
   const [selectedQuestion, setSelectedQuestion] = useState(0);
 
@@ -199,7 +209,7 @@ export default function CreatePage({}: Props) {
           </button>
         </div>
       </form>
-      <Created link={link} />
+      {link && <Created link={link} />}
     </main>
   );
 }
