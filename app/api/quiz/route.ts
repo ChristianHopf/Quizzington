@@ -2,6 +2,8 @@ import { Quiz } from "@/app/types/quiz";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function POST(
   request: NextRequest,
@@ -9,14 +11,15 @@ export async function POST(
 ) {
   try {
     const requestJson = await request.json();
-    // console.log(requestJson);
+    const session = await getServerSession(authOptions);
+    console.log(session);
     // Post quiz
     const quiz = await prisma.quiz.create({
       data: {
         title: requestJson.title,
+        author: { connect: { email: session?.user?.email ?? "" } },
       },
     });
-    // console.log(quiz);
 
     // Post each question
     for (const questionData of requestJson.questions) {
