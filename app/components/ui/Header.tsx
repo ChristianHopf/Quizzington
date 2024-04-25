@@ -1,17 +1,21 @@
 import React from "react";
 import Link from "next/link";
+import AuthButton from "./AuthButton";
 
 type Props = {};
 
 function Header({}: Props) {
   return (
-    <header className="flex flex-row justify-between w-full max-w-[1600px] mt-4 mb-16 ">
-      <Link href={"/"}>
-        <h1 className="text-white text-4xl">Quizzington</h1>
-      </Link>
-      <div className="flex flex-row gap-6 items-center">
-        <button className="text-gray-200 text-2xl">Log in</button>
-        <button className="text-gray-200 text-2xl">Sign up</button>
+    <header className="flex flex-row justify-between w-full py-4 mb-16 ">
+      <div className="container mx-auto">
+        <div className="flex justify-between items-center">
+          <Link href={"/"}>
+            <h1 className="text-white text-4xl">Quizzington</h1>
+          </Link>
+          <div className="flex flex-row gap-6 items-center">
+            <AuthButton />
+          </div>
+        </div>
       </div>
     </header>
   );
