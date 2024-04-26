@@ -3,7 +3,7 @@ import { type NextRequest } from "next/server";
 import axios from "axios";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/utils/authOptions";
 
 export async function GET() {
   try {
@@ -27,7 +27,7 @@ export async function GET() {
       },
     });
     console.log(quizzes);
-    console.log(JSON.stringify(quizzes));
+    // console.log(JSON.stringify(quizzes));
     return NextResponse.json(quizzes);
   } catch (error) {
     console.error("Error fetching quiz:", error);

@@ -3,7 +3,7 @@ import { Noto_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import SessionProvider from "./components/SessionProvider";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "@/utils/authOptions";
 
 // const nanum = Nanum_Gothic({
 //   subsets: ["latin"],

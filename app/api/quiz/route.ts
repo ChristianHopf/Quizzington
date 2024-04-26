@@ -3,7 +3,7 @@ import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/utils/authOptions";
 
 export async function POST(
   request: NextRequest,
