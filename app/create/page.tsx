@@ -22,10 +22,11 @@ export default function CreatePage({}: Props) {
   if (!session || !session.user) {
     redirect("/");
   }
-  console.log(session);
+  // console.log(session);
 
   const [quiz, setQuiz] = useState<Quiz>({
     title: "",
+    length: 1,
     questions: [
       {
         text: "",
@@ -40,7 +41,7 @@ export default function CreatePage({}: Props) {
 
   const [selectedQuestion, setSelectedQuestion] = useState(0);
 
-  console.log(quiz);
+  // console.log(quiz);
 
   async function handleSubmitQuiz() {
     console.log(JSON.stringify(quiz));
