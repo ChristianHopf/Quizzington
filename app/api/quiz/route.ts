@@ -17,6 +17,7 @@ export async function POST(
     const quiz = await prisma.quiz.create({
       data: {
         title: requestJson.title,
+        length: requestJson.questions.length,
         author: { connect: { email: session?.user?.email ?? "" } },
       },
     });
