@@ -7,8 +7,9 @@ export default function Home() {
   return (
     <main className="flex min-h-screen w-full flex-col items-center bg-gradient-to-b from-[#7209b7] to-[#b457f1]">
       <Header />
-      <section className="flex flex-col mb-12">
+      <section className="flex flex-col w-full">
         <HomeInfo />
+        <BrowseQuizzes />
       </section>
     </main>
   );
