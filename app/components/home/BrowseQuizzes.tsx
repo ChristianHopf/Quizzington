@@ -3,11 +3,13 @@
 import React, { useEffect, useState } from "react";
 import BaseCard from "../ui/BaseCard";
 import QuizCard from "./QuizCard";
+import Link from "next/link";
+import { Quiz } from "@/app/types/quiz";
 
 type Props = {};
 
 function BrowseQuizzes({}: Props) {
-  const [browseQuizzes, setBrowseQuizzes] = useState([]);
+  const [browseQuizzes, setBrowseQuizzes] = useState<Quiz[]>([]);
 
   useEffect(() => {
     async function fetchBrowseQuizzes() {
