@@ -8,10 +8,30 @@ import { UserQuiz } from "@/app/types/userquiz";
 import { request } from "http";
 import SubmitModal from "@/app/components/quiz/SubmitModal";
 import ScoreCard from "@/app/components/quiz/ScoreCard";
+import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 type Props = {};
 
-export default function QuizPage({ params }: { params: { id: string } }) {
+export default function QuizPage({
+  params,
+}: {
+  params: { id: string; edit: boolean };
+}) {
+  const searchParams = useSearchParams();
+  const { data: session } = useSession();
+
+  // Edit mode state
+  const [edit, setEdit] = useState<string | null>(searchParams.get("edit"));
+  // If trying to edit any quiz while signed out, redirect to home
+  if (edit) {
+    if (!session || !session.user) {
+      console.log("hi");
+      redirect("/");
+    }
+  }
+
   // Quiz and loading score states
   const [quiz, setQuiz] = useState<UserQuiz | null>(null);
   const [loadingScores, setLoadingScores] = useState(false);
@@ -34,7 +54,25 @@ export default function QuizPage({ params }: { params: { id: string } }) {
           throw new Error("Failed to fetch quiz");
         }
         const quizData = await res.json();
-        console.log(quizData);
+        // console.log(quizData);
+        // Redirect if the user is not authenticated as the quiz's author
+        if (edit === "true") {
+          try {
+            const res = await fetch(`/api/verify-user`, {
+              method: "POST",
+              body: JSON.stringify({
+                id: quizData.authorId,
+              }),
+            });
+            const match = await res.json();
+            console.log(match);
+            if (!match) {
+              redirect("/");
+            }
+          } catch (err) {
+            console.error("Error fetching quiz: ", err);
+          }
+        }
         setQuiz(quizData);
         // Set questionChoices array
         const emptyChoices = [];
@@ -47,7 +85,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
       }
     }
     fetchQuiz();
-  }, [params.id]);
+  }, [params.id, edit]);
 
   async function handleSubmitQuiz() {
     setLoadingScores(true);
@@ -130,7 +168,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <main className="flex flex-col items-center min-h-screen bg-gradient-to-b from-[#7209b7] to-[#b457f1]">
+    <main className="flex flex-col items-center min-h-screen bg-[#7209b7]">
       <Header />
       {/* Quiz serves as a loading state */}
       {!quiz && <BeatLoader color="white" />}

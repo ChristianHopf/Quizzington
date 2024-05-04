@@ -18,16 +18,11 @@ function QuizList({ quizzes }: Props) {
             <h1 className="text-xl mb-2">{quiz?.title}</h1>
             <p className="text-gray-400">Questions: {quiz?.Question.length}</p>
           </div>
-          <div className="flex flex-row items-center gap-2">
+          <div className="flex flex-row gap-4">
+            <button className=" bg-white">Edit</button>
             <Link href={`/quiz/${quiz?.id}`}>
-              <button className="bg-[#b457f1] text-white rounded-lg px-4 py-2 hover:bg-[#7209b7] focus:outline-none focus:bg-[#7209b7]">
-                Take
-              </button>
+              <button className="btn  rounded-2xl px-4 py-2 hover:bg-[#7209b7] hover:text-white">Take</button>
             </Link>
-
-            <button className="bg-[#b457f1] text-white rounded-lg px-4 py-2 hover:bg-[#7209b7] focus:outline-none focus:bg-[#7209b7]">
-              Edit
-            </button>
           </div>
         </div>
       ))}

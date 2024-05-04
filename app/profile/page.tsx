@@ -30,7 +30,7 @@ function ProfilePage({}: Props) {
   }, []);
 
   return (
-    <main className="flex min-h-screen w-full flex-col items-center bg-gradient-to-b from-[#7209b7] to-[#b457f1]">
+    <main className="flex min-h-screen w-full flex-col items-center bg-[#7209b7]">
       <Header />
       {!quizzes && <BeatLoader color="white" />}
       {quizzes && (
@@ -38,7 +38,7 @@ function ProfilePage({}: Props) {
           <div className="flex flex-row mb-4 justify-between">
             <h1 className="text-3xl text-white">My Quizzes</h1>
             <Link href={"/create"}>
-              <button className="text-xl text-white rounded-md px-4 py-2 ">
+              <button className="btn text-xl rounded-2xl px-4 py-2">
                 New Quiz
               </button>
             </Link>

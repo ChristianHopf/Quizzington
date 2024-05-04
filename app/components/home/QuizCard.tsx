@@ -7,14 +7,17 @@ type Props = {
 };
 
 function QuizCard({ data }: Props) {
+  console.log(data);
   return (
-    <Link
-      href={`/quiz/${data.id}`}
-      className="bg-[#7209b7] rounded-lg shadow-lg px-4 py-2 w-1/5 flex flex-col items-center"
-    >
-      <h1 className="text-white text-2xl">{data.title}</h1>
-      <p className="text-white">Questions: {data.length}</p>
-    </Link>
+    <div className="card bg-white rounded-lg shadow-lg px-4 py-6 w-96 flex flex-col items-center">
+      <h1 className="card-title text-2xl">{data.title}</h1>
+      <p className="mb-4">Questions: {data.length}</p>
+      <div className="card-actions justify-end">
+        <button className="btn">
+          <Link href={`/quiz/${data.id}`}>Take Quiz</Link>
+        </button>
+      </div>
+    </div>
   );
 }
 

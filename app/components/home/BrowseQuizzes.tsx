@@ -28,8 +28,9 @@ function BrowseQuizzes({}: Props) {
     fetchBrowseQuizzes();
   }, []);
   return (
-    <div className="min-h-screen items-center w-full py-4 px-12 mt-16 bg-white">
-      <div className="flex flex-row flex-wrap justify-center gap-16">
+    <div className="min-h-screen flex flex-col items-center w-full py-4 px-12 mt-16 bg-[#7209b7]">
+      <h1 className="text-white font-bold text-4xl mx-auto mt-8 mb-16">Browse quizzes</h1>
+      <div className="flex flex-row flex-wrap w-full justify-center gap-16">
         {browseQuizzes.map((quiz, index) => (
           <QuizCard key={index} data={quiz} />
         ))}

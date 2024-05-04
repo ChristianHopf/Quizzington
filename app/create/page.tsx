@@ -15,9 +15,11 @@ import { Question } from "../types/question";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-type Props = {};
-
-export default function CreatePage({}: Props) {
+export default function CreatePage({
+  params,
+}: {
+  params: { id: string; edit: boolean };
+}) {
   const { data: session } = useSession();
   if (!session || !session.user) {
     redirect("/");
@@ -25,6 +27,7 @@ export default function CreatePage({}: Props) {
   // console.log(session);
 
   const [quiz, setQuiz] = useState<Quiz>({
+    id: "",
     title: "",
     length: 1,
     questions: [
@@ -141,7 +144,7 @@ export default function CreatePage({}: Props) {
   }
 
   return (
-    <main className="flex flex-col items-center min-h-screen bg-gradient-to-b from-[#7209b7] to-[#b457f1]">
+    <main className="flex flex-col items-center min-h-screen bg-[#7209b7]">
       <Header />
       <form
         onSubmit={handleSubmitQuiz}
